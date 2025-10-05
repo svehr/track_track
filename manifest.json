@@ -1,0 +1,28 @@
+{
+   "content_scripts": [ {
+      "css": [ "styles.css" ],
+      "js": [ "prepare.js" ],
+       "matches": [   "https://www.netflix.com/*"
+                    , "https://www.viki.com/*"
+                    , "https://www.youtube.com/*"],
+      "runAt": "document_start"
+   } ],
+   "web_accessible_resources": [{
+       "resources": [ "/injected_scripts/*" ],
+       "matches": ["<all_urls>"],
+       "use_dynamic_url": true
+   }],
+   "description": "Display up to 2 subtitle tracks at once. Works for netflix, viki and youtube",
+   "action" : {
+      "default_icon": {
+        "128": "icon-128.svg.png"
+      },
+      "default_title": "Track Track"
+   },
+   "icons": {
+      "128": "icon-128.svg.png"
+   },
+   "manifest_version": 3,
+   "name": "Track Track",
+   "version": "0.1.0"
+}

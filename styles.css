@@ -1,0 +1,120 @@
+.vtt1_cue {
+    z-index: 2147483647;
+    background: rgba(0, 0, 0, 0.6);
+    color: #c56602;
+    font-size: 34px;
+    text-align: left;
+    margin: 0px;
+    left: 4px;
+    /* width: fit-content; */
+    padding: 6px;
+    user-select: text;
+}
+
+.vtt2_cue {
+    z-index: 2147483647;
+    background: rgba(0, 0, 0, 0.6);
+    color: #c56602;
+    font-size: 34px;
+    text-align: left;
+    margin: 0px;
+    left: 4px;
+    /* width: fit-content; */
+    padding: 6px;
+    user-select: text;
+}
+
+
+#vtt1_anchor_div {
+    z-index: 2147483647;
+    padding: 0px;
+    position: absolute;
+    /* top , left, width hardcoded in injected_script.js
+     * since parent element may have different dimensions than video element (i.e. on youtube) */
+    height: 0px;
+    background: rgba(0, 0, 0, 0.0);
+    opacity: 1;
+}
+
+#vtt2_anchor_div {
+    z-index: 2147483647;
+    padding: 0px;
+    position: absolute;
+    /* top , left, width hardcoded in injected_script.js
+     * since parent element may have different dimensions than video element (i.e. on youtube) */
+    height: 0px;
+    background: rgba(0, 0, 0, 0.0);
+    opacity: 1;
+}
+
+#video_texttrack_controller {
+    z-index: 2147483647;
+    padding: 0.1em;
+    border-radius: 0.3em;
+    position: absolute;
+    top: 1%;
+    left: 35%;
+    background: #1c1c1c;
+    color: #b6b6b6;
+    text-align: left;
+    font-size: 30px;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#video_texttrack_controller:hover {
+    opacity: 1.0 !important;
+    transition-delay: 0s;
+}
+
+#vttc_header {
+    cursor: move;
+    margin: 4px;
+}
+
+#vtt_control {
+    display: flex;
+    flex-direction: row;
+}
+
+#vtt_control * {
+    margin: 4px;
+}
+
+#vtt1_control {
+    display: flex;
+    flex-direction: column;
+}
+
+#vtt2_control {
+    display: flex;
+    flex-direction: column;
+}
+
+.vtt_select_lang_button {
+    padding: 0.1em 0.15em;
+    display: inline-block;
+    border-radius: 0.3em;
+    border: 0.05em solid #444444;
+    background: #333333;
+    color: #b6b6b6;
+
+    &:hover {
+        background-color: #5588cc;
+        &:before {
+            width: 100%;
+        }
+    }
+}
+
+.vtt_select_lang_button_active {
+    background-color: #5588cc !important;
+}
+
+/* hide netflix subtitles */
+.player-timedtext-text-container {
+    display: none !important;
+}
