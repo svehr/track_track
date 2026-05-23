@@ -35,7 +35,6 @@ This extension has the following features (also see [Bugs & Limitations section]
 
 ## Roadmap {#roadmap}
 
-  * fix youtube
   * customizable subtitle duration in the UI
 
 ## Example Pictures {#example}

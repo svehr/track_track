@@ -16,7 +16,7 @@ var TT;
     TT.SITE_origin_dict = {
         "https://www.netflix.com": SITE.netflix,
         "https://www.viki.com": SITE.viki,
-        // "https://www.youtube.com":   SITE.youtube, // NOTE: / TODO: broken currently
+        "https://www.youtube.com":   SITE.youtube,
     };
 
     // abbrev: vtt ≙ video texttrack

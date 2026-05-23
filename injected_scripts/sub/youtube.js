@@ -4,28 +4,15 @@ var TT;
 
 (function (TT) {
     TT.youtube = {};
-    TT.youtube.xml_to_cue_array = function (xml) {
 
-        var parser = new DOMParser();
-        xml = parser.parseFromString(xml, 'text/xml');
+    TT.youtube.json_to_cue_array = function (json) {
 
-        var transcript = xml.querySelector('transcript');
-        var cues = transcript.querySelectorAll('text');
-
-        var acc = [];
-        for (var i = 0; i < cues.length; i++) {
-            var x = cues[i]
-            // NOTE: / TODO: 'start' and 'dur' attributes assumed to be given in seconds as floating point numbers with max 3 decimal places
-            // ⇝ Math.floor should not change number
-            var beg_ms = Math.floor(parseFloat(x.getAttribute('start')) * 1000);
-            var dur_ms = Math.floor(parseFloat(x.getAttribute('dur')) * 1000);
-            acc.push({
-                beg_ms: beg_ms,
-                end_ms: beg_ms + dur_ms,
-                txt: x.textContent
-            })
-        }
-        return acc;
+        sub_info = JSON.parse(json);
+        return sub_info.events.map((e) => ({
+                beg_ms: e.tStartMs,
+                end_ms: e.tStartMs + e.dDurationMs,
+                txt: e.segs.filter((s) => s.utf8).map((s) => s.utf8).join('\n'),
+        }));
     }
 
     TT.youtube.fetch_track_then = function (bcp47, cont_resolved, cont_failed) {
@@ -57,20 +44,12 @@ var TT;
         }
         const url = subs[idx].baseUrl;
 
-        function process_xml(sub_string_xml) {
+        function process_json(sub_string_json) {
             var id = "TT-" + bcp47;
 
             TT.sub_response = (TT.sub_response || (TT.sub_response = {}))
-            TT.sub_response[bcp47] = sub_string_xml;
-            var sub = TT.cue_array_to_webvtt(TT.youtube.xml_to_cue_array(sub_string_xml));
-            // WORKAROUND: transform HTML entities
-            // dict: HTML entity string → character (as string)
-            const _dict = {
-                "&#39;": "'",
-                "&quot;": '"'
-            }
-            // the following line does (sub.replace(/KEY[0]|KEY[1]…/g, string => _dict[string]))
-            sub = sub.replace(new RegExp(`${Object.keys(_dict).join("|")}`, "g"), string => _dict[string])
+            TT.sub_response[bcp47] = sub_string_json;
+            var sub = TT.cue_array_to_webvtt(TT.youtube.json_to_cue_array(sub_string_json));
             TT.sub_webVTT = (TT.sub_webVTT || (TT.sub_webVTT = {}))
             TT.sub_webVTT[bcp47] = sub;
             var url = URL.createObjectURL(new Blob([sub], { type: 'text/vtt' })).toString();
@@ -83,27 +62,54 @@ var TT;
             return track;
         }
 
-        // TODO: it seems to be broken; we only receive an empty line
-        fetch(url)
-            .then(
-                function (r) {
-                    if (!r.ok) {
-                        console.log("ERROR: response from 'url' (" + url + ") was not \"ok\"");
-                        throw new Error("ERROR: response from 'url' (" + url + ") was not \"ok\"");
-                    }
-                    return r.text();
-                },
-                function () {
-                    console.log("ERROR: could not fetch 'url' (" + url + ")");
-                    throw new Error("ERROR: could not fetch 'url' (" + url + ")");
-                })
-            .then(
-                function (sub_string_xml) {
-                    cont_resolved(process_xml(sub_string_xml));
-                },
-                function () {
-                    console.log("ERROR: could not extract \".text()\" of response from 'url' (" + url + ")");
-                    throw new Error("ERROR: could not extract \".text()\" of response from 'url' (" + url + ")");
-                })
+        let get_webpo_client = window.top['havuokmhhs-0']?.bevasrs?.wpc
+        mws_params = {
+            'c': ytInitialPlayerResponse.videoDetails.videoId,
+            'e': undefined,
+            'mc': true,
+            'me': true,
+        }
+        get_webpo_client().then((client) => client.mws(mws_params)).catch(
+            (e) => {{
+                if (String(e).includes('SDF:notready')) {{
+                    return 'backoff';
+                }}
+                else {{
+                    throw e;
+                }}
+            }}
+        ).then(
+            function (po_token) {
+                u = new URL(url)
+                endpoint = u.origin + u.pathname
+                query_string = "?" + new URLSearchParams(u.search).toString() + `&potc=1&pot=${encodeURIComponent(po_token)}&fmt=json3&xorb=2&xobt=3&xovt=3&cbr=Chrome&cbrver=143.0.0.0&c=WEB&cver=2.20260521.00.00&cplayer=UNIPLAYER&cos=X11&cplatform=DESKTOP`
+                url_with_pot = endpoint + query_string
+                fetch(url_with_pot)
+                    .then(
+                        function (r) {
+                            if (!r.ok) {
+                                console.log("ERROR: response from 'url' (" + url + ") was not \"ok\"");
+                                throw new Error("ERROR: response from 'url' (" + url + ") was not \"ok\"");
+                            }
+                            return r.text();
+                        },
+                        function () {
+                            console.log("ERROR: could not fetch 'url' (" + url + ")");
+                            throw new Error("ERROR: could not fetch 'url' (" + url + ")");
+                        })
+                    .then(
+                        function (sub_string_json) {
+                            cont_resolved(process_json(sub_string_json));
+                        },
+                        function () {
+                            console.log("ERROR: could not extract \".text()\" of response from 'url' (" + url + ")");
+                            throw new Error("ERROR: could not extract \".text()\" of response from 'url' (" + url + ")");
+                        })
+            },
+            function () {
+                console.log("ERROR: could not get PO token");
+                throw new Error("ERROR: could not get PO token");
+            }
+        )
     }
 })(TT || (TT = {}));
