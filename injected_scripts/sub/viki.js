@@ -10,9 +10,14 @@ var TT;
         //   argument = track
         // cont_failed:   function to use on failed   track fetch
         //   no arguments
-        const player = window.player;
+        const vmplayer_div = document.querySelector("div#vmplayer_id");
+        if(! vmplayer_div) {
+            console.log("'div#vmplayer_id' not initialized yet");
+            cont_failed();
+            return;
+        }
+        var subs = vmplayer_div.player.options_.streamSubtitles.dash;
 
-        var subs = player.options.subtitles;
         var idx = subs.findIndex(function (x) { return x.srclang == bcp47; })
         if (idx < 0) {
             console.log("could not find subtitle for language ", bcp47);
