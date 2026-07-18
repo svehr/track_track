@@ -65,7 +65,7 @@ var TT;
                     }
                     else
                     {
-                        console.log(`WARN: json_parse: no download urls found for language '${t}.language'`)
+                        console.log(`WARN: json_parse: no download urls found for language '${t.language}'`)
                     }
                 }
                 TT.netflix.subtitle_track_webvtt_url_cache[data.result.movieId] = lang_dict;
