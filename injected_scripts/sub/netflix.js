@@ -27,7 +27,7 @@ var TT;
             const decoded_value = json_parse(json_stringify(value));
 
             // only change "messages" that are relevant to us
-            if (decoded_value && decoded_value.params)
+            if (decoded_value && decoded_value.url === 'licensedManifest' && decoded_value.params)
             {
                 console.log("JSON.stringify -> ", decoded_value)
                 if (! decoded_value.params.showAllSubDubTracks) {
