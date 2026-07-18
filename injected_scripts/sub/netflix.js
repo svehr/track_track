@@ -46,17 +46,17 @@ var TT;
         window.JSON.parse = function(value) {
             const data = json_parse(value);
             // only consider "messages" that are relevant to us
-            if (data && data.result && data.result.movieId && data.result.timedtexttracks)
+            if (data && data.result && data.result.textTracks)
             {
                 console.log("JSON.parse -> ", data)
                 const lang_dict = {};
-                var T = data.result.timedtexttracks;
+                var T = data.result.textTracks;
                 for(var i = 0; i < T.length; i += 1)
                 {
                     var t = T[i]
-                    if(t.ttDownloadables && t.ttDownloadables[netflix_webvtt_id])
+                    if(t.downloadables && t.downloadables[netflix_webvtt_id])
                     {
-                        var urls_dict = t.ttDownloadables[netflix_webvtt_id].urls;
+                        var urls_dict = t.downloadables[netflix_webvtt_id].urls;
                         var urls_dict_keys = Object.keys(urls_dict);
                         const urls = new Array(urls_dict_keys.length);
                         for(var j = 0; j < urls_dict_keys.length; j += 1)
