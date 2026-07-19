@@ -259,10 +259,10 @@ var TT;
                 var j = 0
                 while (j < new_cues.length) {
                     var ci = mk_cue_info(new_cues[j], next_top);
+                    info.cue_parent.appendChild(ci.elem);  // needs to be before reading `.offsetTop` and `.offsetHeight`
                     next_top = ci.elem.offsetTop + ci.elem.offsetHeight + cue_gap_px;
                     j += 1;
 
-                    info.cue_parent.appendChild(ci.elem);
                     const cue_out_of_viewport_bounds = (ci.elem.getBoundingClientRect().bottom + cue_gap_bottom_px) >= window.innerHeight;
                     const cue_out_of_video_bounds = (ci.elem.offsetTop + ci.elem.offsetHeight + cue_gap_bottom_px) >= video.clientHeight;
                     if (cue_out_of_viewport_bounds
